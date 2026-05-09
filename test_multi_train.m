@@ -3,7 +3,7 @@
 clear all;
 
 
-dataset = 2;
+dataset = 3;
 
 if dataset == 1
     t_min=0;
@@ -25,9 +25,19 @@ elseif dataset == 2
     spikes{2} = [8 20 24 36 40 52 56 68 72 84];
     fprintf('Train 1: '); disp(spikes{1});
     fprintf('Train 2: '); disp(spikes{2});
-
+elseif dataset == 3
+    % 15 trains with 50 spikes each, randomly generated within a 100-second window
+    t_min=0;
+    t_max=100;
+    n_trains = 15;
+    n_spikes = 50;
+    spikes = cell(1, n_trains);
+    for i = 1:n_trains
+        spikes{i} = sort(rand(1, n_spikes) * (t_max - t_min) + t_min);
+        fprintf('Train %d: ', i); disp(spikes{i});
+    end
 else   
-    error('Invalid dataset selection. Please choose 1 or 2.');
+    error('Invalid dataset selection. Please choose 1, 2, or 3.');
 end
 
 
@@ -39,3 +49,9 @@ disp(C_matrix);
 
 fprintf('\n=== Global SPIKE-Synchronization Index ===\n');
 fprintf('C_global: %.4f\n', C_global);
+
+% Plotting results
+figure;
+data.C_matrix = C_matrix;
+data.C_global = C_global;
+f_spike_synchro_plot(gcf, data, []);
