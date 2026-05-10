@@ -3,7 +3,7 @@
 clear all;
 
 
-dataset = 3;
+dataset = 1;
 
 if dataset == 1
     t_min=0;
@@ -42,7 +42,7 @@ end
 
 
 % Call multi-train function
-[C_matrix, C_global] = f_spike_synchro_multi(spikes, t_min, t_max);
+[C_matrix, C_global, spike_synchro_data] = f_spike_synchro_multi(spikes, t_min, t_max);
 
 fprintf('=== Pairwise Coincidence Matrix ===\n');
 disp(C_matrix);
@@ -51,7 +51,7 @@ fprintf('\n=== Global SPIKE-Synchronization Index ===\n');
 fprintf('C_global: %.4f\n', C_global);
 
 % Plotting results
-figure;
 data.C_matrix = C_matrix;
 data.C_global = C_global;
+data.spike_synchro_data = spike_synchro_data; 
 f_spike_synchro_plot(gcf, data, []);

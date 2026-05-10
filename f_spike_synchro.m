@@ -4,9 +4,9 @@ function [C, spike_times] = f_spike_synchro(Spike_train1, Spike_train2, t_min, t
     % Returns C: coincidence array (1 if matched and within tau, 0 otherwise)
     %        spike_times: corresponding spike times for each coincidence value
     
-    % Ensure inputs are column vectors
-    Spike_train1 = Spike_train1(:);
-    Spike_train2 = Spike_train2(:);
+    % Ensure time spikes are sorted and unique
+    Spike_train1 = unique(sort(Spike_train1(:)));
+    Spike_train2 = unique(sort(Spike_train2(:)));
     % Slice spikes within time window
     spike_train1_sliced = Spike_train1(Spike_train1 >= t_min & Spike_train1 <= t_max);
     spike_train2_sliced = Spike_train2(Spike_train2 >= t_min & Spike_train2 <= t_max);
@@ -41,7 +41,6 @@ end
 function min_interval = f_interval(spike_train, spike, t_min, t_max)
     % Calculate tau for adaptive coincidence detection
     % tau = min(forward_ISI, backward_ISI) / 2
-    % Using eq. (15) and (16) for SPIKE-Synchronization
     
     spike_index = find(abs(spike_train - spike) < 1e-10, 1);
     
@@ -78,7 +77,6 @@ function min_interval = f_interval(spike_train, spike, t_min, t_max)
 end
 
 function check = f_in_interval(spike1, spike2, tau1, tau2)
-    % Adaptive coincidence detection: eq. (15) and (16)
     % tau_ij = min(tau_i, tau_j)
     % Coincident if |spike1 - spike2| < tau_ij
     tau_ij = min(tau1, tau2);
