@@ -1,0 +1,33 @@
+# MATLAB editor/session temporary files
+*.asv
+*.autosave
+*.m~
+
+# MATLAB runtime/session logs
+matlab_crash_dump.*
+
+# Generated data/results (often large or local)
+*.mat
+*.fig
+
+# Compiled binaries and generated artifacts
+*.mex*
+*.p
+*.slxc
+
+# Jupyter in MATLAB/Python workflows
+.ipynb_checkpoints/
+
+# Secrets and local credentials
+*.pem
+*.key
+*.p12
+*.pfx
+.env
+.env.*
+credentials*.json
+
+# OS / editor local files
+.DS_Store
+Thumbs.db
+.vscode/
