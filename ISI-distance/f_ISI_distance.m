@@ -1,3 +1,7 @@
+%% ISI-distance computation with auxiliary boundary spikes and plotting 
+% Author: Laure WOLFF
+% Date: May 2026
+
 clear all;
 
 tmin=0;
