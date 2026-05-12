@@ -33,10 +33,11 @@ t_max = 100;
 % DISPLAY
 % =====================================================
 
+[spikes, aux_begin, aux_end] = add_auxiliary_spikes(spikes, t_min, t_max);
 
 
 if mod(measures,4)>1                                                        % SPIKE-distance
-    [D_global, profile_global, D_matrix] = SPIKE_dist_N(spikes, t_min, t_max);
+    [D_global, profile_global, D_matrix] = SPIKE_dist_N(spikes, t_min, t_max, aux_begin, aux_end);
     if mod(showing,4)>1
         disp(D_global);
     end
@@ -79,16 +80,9 @@ end
 
 %% =========================================================
 % SPIKE-distance between TWO spike trains (2x2 case)
-% WITH AUXILIARY EDGE SPIKES
 % =========================================================
-function [SPIKE_distance_2x2, profile_mat] = SPIKE_dist_2x2(spikes1, spikes2, t_min, t_max)
+function [SPIKE_distance_2x2, profile_mat] = SPIKE_dist_2x2(spikes1, spikes2, t_min, t_max, aux1_begin, aux1_end, aux2_begin, aux2_end)
 
-    %% =====================================================
-    % ADD AUXILIARY SPIKES
-    %% =====================================================
-
-    [spikes1, aux1_begin, aux1_end] = add_auxiliary_spikes(spikes1, t_min, t_max);
-    [spikes2, aux2_begin, aux2_end] = add_auxiliary_spikes(spikes2, t_min, t_max);
 
     %% =====================================================
     % INITIALIZE PROFILE
@@ -261,42 +255,59 @@ end
 % ADD AUXILIARY SPIKES (for edge correction)
 %% =========================================================
 function [spikes, aux_begin, aux_end] = add_auxiliary_spikes(spikes, t_min, t_max)
+    % Add auxiliary spike times at the beginning and end of the observation window
 
+    % ===============================================
+    % ====== Handle cell array of spike trains ======
+    % ===============================================
+
+    if iscell(spikes)
+        aux_begin = zeros(1, length(spikes));
+        aux_end = zeros(1, length(spikes));
+        for i = 1:length(spikes)
+            [spikes{i}, aux_begin(i), aux_end(i)] = process_single_train(spikes{i}, t_min, t_max);
+        end
+        return;
+    end
+
+    % =======================================
+    % ====== Handle single spike train ======
+    % =======================================
+
+    [spikes, aux_begin, aux_end] = process_single_train(spikes, t_min, t_max);
+end
+
+function [train, aux_begin, aux_end] = process_single_train(train, t_min, t_max)
     aux_begin = 0;
     aux_end = 0;
 
-    spikes = sort(unique(spikes));
+    train = sort(unique(train));
 
-    %% -------------------------
-    % beginning
-    %% -------------------------
-    if spikes(1) > t_min
+    % Add auxiliary spike at the beginning if needed
+    if train(1) > t_min
 
-        if length(spikes) >= 2
-            aux = spikes(1) - max(spikes(1)-t_min, spikes(2)-spikes(1));
+        if length(train) >= 2
+            aux = train(1) - max(train(1)-t_min, train(2)-train(1));
         else
             aux = t_min;
         end
 
-        spikes = [aux spikes];
+        train = [aux train];
         aux_begin = 1;
     end
 
-    %% -------------------------
-    % end
-    %% -------------------------
-    if spikes(end) < t_max
+    % Add auxiliary spike at the end if needed
+    if train(end) < t_max
 
-        if length(spikes) >= 2
-            aux = spikes(end) + max(t_max-spikes(end), spikes(end)-spikes(end-1));
+        if length(train) >= 2
+            aux = train(end) + max(t_max-train(end), train(end)-train(end-1));
         else
             aux = t_max;
         end
 
-        spikes = [spikes aux];
+        train = [train aux];
         aux_end = 1;
     end
-
 end
 
 
@@ -327,8 +338,10 @@ end
 
 
 
-
-function [D_global, profile_global, D_matrix] = SPIKE_dist_N(spikes, t_min, t_max)
+%% =========================================================
+% SPIKE-distance between N spike trains
+% =========================================================
+function [D_global, profile_global, D_matrix] = SPIKE_dist_N(spikes, t_min, t_max, aux_begin, aux_end)
 
     N = length(spikes);
 
@@ -344,7 +357,7 @@ function [D_global, profile_global, D_matrix] = SPIKE_dist_N(spikes, t_min, t_ma
     for i = 1:N
         for j = i+1:N
 
-            [d, prof] = SPIKE_dist_2x2(spikes{i}, spikes{j}, t_min, t_max);
+            [d, prof] = SPIKE_dist_2x2(spikes{i}, spikes{j}, t_min, t_max, aux_begin(i), aux_end(i), aux_begin(j), aux_end(j));
 
             D_matrix(i,j) = d;
             D_matrix(j,i) = d;
