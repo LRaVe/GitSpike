@@ -36,7 +36,7 @@ fprintf('\n--- Running adaptive auto ISI-distance (auto) ---\n');
 % ISI-Distance Adaptive (MRTS = 1.5)
 fprintf('\n--- Running adaptive manual ISI-distance (1.5) ---\n');
 [mat_adapt_d, I_list_d, mean_d] = f_ISI_distance_adaptive(spikes_trains, ...
-    tmin, tmax, 1.5);
+    tmin, tmax,  1.5);
 
 % Comparaison of the resultats in the window
 fprintf('\nRESULTS COMPARISON:\n');

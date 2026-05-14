@@ -64,6 +64,7 @@ function [dist_matrix,I, I_mean] = f_ISI_distance(spikes_trains, tmin, tmax)
                    val_y = spikes{j}(idy+1) - spikes{j}(idy);
                end
 
+
                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
                I_t = abs(val_x - val_y) / max(val_x, val_y);
