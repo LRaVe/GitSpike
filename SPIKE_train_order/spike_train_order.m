@@ -1,4 +1,4 @@
-function results=spike_train_order()
+function spike_train_order()
     % Compute the spike-train-order value for a set of spike trains
     % This function loads spike data, computes pairwise train orders, 
     % and outputs the overall spike-train-order value.
@@ -36,11 +36,13 @@ function results=spike_train_order()
     F = compute_spike_train_order_value(spikes, results, number_spikes);
 
     if nargout==0
-        plot_spike_train_order(spikes,results,order_matrix,F,tmin,tmax);
+        spike_train_order_profile=plot_spike_train_order(spikes,results,order_matrix,F,tmin,tmax);
     end
 
     % Display results to console
+    fprintf('Spike train order F = %.4f\n', F);
+    disp('Spike train order profile: ');
+    disp(spike_train_order_profile);
     disp('Spike train order matrix:');
     disp(order_matrix);
-    disp(['Spike train order F=', num2str(F)]);
 end

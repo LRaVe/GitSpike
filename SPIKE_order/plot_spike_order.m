@@ -1,6 +1,7 @@
-function plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold) 
+function spike_order_profile=plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold) 
     % Visualize spike-order results for all spikes across spike trains
     % Displays individual spike orderings and the overall D metric
+    % Returns a two-column array: [times, order_values]
     
     % Compute spike-order values
     n=length(spikes);
@@ -18,6 +19,9 @@ function plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold)
     if abs(D) < threshold
         D = 0;
     end
+
+    % Create output: two-column array with times and order values
+    spike_order_profile = [sortedTimes(:), sortedOrders(:)];
 
     % Create first figure: temporal spike ordering
     figure;
@@ -46,8 +50,8 @@ function plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold)
     set(gca, 'XDir', 'normal');
     set(gca, 'YDir', 'reverse');
     set(gca, 'XTick', 1:n, 'YTick', 1:n);
-    xlabel('Train index');
-    ylabel('Train index');
+    xlabel('Spike trains');
+    ylabel('Spike trains');
     title(sprintf('Spike order matrix D = %g', D));
     hold off;
 end

@@ -1,4 +1,4 @@
-function results=spike_order()
+function spike_order()
     % Compute and display spike-order analysis for test spike trains
     % This script demonstrates the spike-order metric calculation and visualization
     
@@ -34,10 +34,12 @@ function results=spike_order()
 
     if nargout==0
         % Visualize results if no output is requested
-        plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold);
+        spike_order_profile=plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold);
     end
 
+    disp(['Spike order D = ', num2str(sum(cellfun(@sum, results)))]);
+    disp('Spike order profile: ');
+    disp(spike_order_profile);
     disp('Spike order matrix:');
     disp(SO_matrix);
-    disp(['Spike order D=', num2str(sum(cellfun(@sum, results)))]);
 end

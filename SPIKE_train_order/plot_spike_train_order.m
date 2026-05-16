@@ -1,4 +1,4 @@
-function plot_spike_train_order(spikes,orders,order_matrix,F,tmin,tmax)
+function spike_train_order_profile=plot_spike_train_order(spikes,orders,order_matrix,F,tmin,tmax)
     % Visualize spike-train-order results with two plots:
     % 1) Temporal ordering of all spikes with the F metric
     % 2) Heatmap of pairwise train ordering relationships
@@ -9,6 +9,9 @@ function plot_spike_train_order(spikes,orders,order_matrix,F,tmin,tmax)
 
     [sortedTimes,orderInd]=sort(time);
     sortedOrders=value(orderInd);
+
+    % Create output: two-column array with times and order values
+    spike_train_order_profile = [sortedTimes(:), sortedOrders(:)];
 
     % Create first figure: Temporal spike ordering
     figure;
@@ -38,8 +41,8 @@ function plot_spike_train_order(spikes,orders,order_matrix,F,tmin,tmax)
     set(gca, 'XDir', 'normal');
     set(gca, 'YDir', 'reverse');
     set(gca, 'XTick', 1:n, 'YTick', 1:n);
-    xlabel('Train index');
-    ylabel('Train index');
-    title(sprintf('Pairwise train order matrix F = %g', F));
+    xlabel('Spike trains');
+    ylabel('Spike trains');
+    title(sprintf('Spike train order F = %g', F));
     hold off;
 end
