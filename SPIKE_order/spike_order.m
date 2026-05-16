@@ -4,13 +4,13 @@ function results=spike_order()
     
     threshold=1e-10;
 
-    % Ensure spike_common is on the MATLAB path
+    % Ensure the whole repository is on the MATLAB path
     thisFile = mfilename('fullpath');
     if ~isempty(thisFile)
         repoRoot = fileparts(fileparts(thisFile));
-        addpath(fullfile(repoRoot, 'spike_common'));
+        addpath(genpath(repoRoot));
     else
-        addpath('../spike_common');
+        addpath(genpath('..'));
     end
 
     % Define observation window and initialize spike trains
@@ -37,6 +37,7 @@ function results=spike_order()
         plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold);
     end
 
-    disp('Spike-order results:');
-    disp(results);
+    disp('Spike order matrix:');
+    disp(SO_matrix);
+    disp(['Spike order D=', num2str(sum(cellfun(@sum, results)))]);
 end

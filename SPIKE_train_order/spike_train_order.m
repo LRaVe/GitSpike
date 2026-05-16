@@ -3,13 +3,13 @@ function results=spike_train_order()
     % This function loads spike data, computes pairwise train orders, 
     % and outputs the overall spike-train-order value.
 
-    % Ensure spike_common is on the MATLAB path
+    % Ensure the whole repository is on the MATLAB path
     thisFile = mfilename('fullpath');
     if ~isempty(thisFile)
         repoRoot = fileparts(fileparts(thisFile));
-        addpath(fullfile(repoRoot, 'spike_common'));
+        addpath(genpath(repoRoot));
     else
-        addpath('../spike_common');
+        addpath(genpath('..'));
     end
 
     % Define time window and initialize spike train data
@@ -40,9 +40,7 @@ function results=spike_train_order()
     end
 
     % Display results to console
-    disp('Spike-train-order results:');
-    disp(results);
-    disp('Pairwise train order matrix:');
+    disp('Spike train order matrix:');
     disp(order_matrix);
-    disp(['Spike-train-order F=', num2str(F)]);
+    disp(['Spike train order F=', num2str(F)]);
 end
