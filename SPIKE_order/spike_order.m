@@ -30,11 +30,11 @@ function results=spike_order()
     [spikes, ~, ~] = add_auxiliary_spikes(spikes, tmin, tmax);
     
     % Compute spike-order values
-    results=order_spikes(tmin,tmax,spikes);
+    [results, SO_matrix] = order_spikes(tmin,tmax,spikes);
 
     if nargout==0
         % Visualize results if no output is requested
-        plot_spike_order(spikes,tmin,tmax,threshold);
+        plot_spike_order(spikes,SO_matrix,tmin,tmax,threshold);
     end
 
     disp('Spike-order results:');
